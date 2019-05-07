@@ -1,10 +1,13 @@
 function go() {
+    //remove all reposts already loaded into the page
     var app = document.getElementById("app");
     $(".stream__list .lazyLoadingList .lazyLoadingList__list").children().each(function(i,post){
       if(jQuery(post).find("soundContext__repost") != null){
         jQuery(post).remove();
       }
     })
+    
+    //add a listener that removes reposts as they are added.
     var containerMutationObserver = new MutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
           if(mutation.type == "childList" && mutation.addedNodes.length > 0 && mutation.addedNodes[0].className == "soundList__item" && mutation.addedNodes[0].innerHTML.includes("reposted by")){
@@ -18,14 +21,11 @@ function go() {
       });
     });
 
+    //run the listener
     containerMutationObserver.observe(app, {
       childList: true,
       subtree: true,
     });
-
-    
-
-    
 }
 
 window.onload=function(){
@@ -35,9 +35,4 @@ window.onload=function(){
     console.log(jQuery);
     go();
   }
-  
-
 }
-
-
-//checkExisting();
